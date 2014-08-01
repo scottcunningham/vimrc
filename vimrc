@@ -141,7 +141,7 @@ let g:airline_theme='powerlineish'
 let g:airline_powerline_fonts=1
 
 " Spelling
-au BufNewFile,BufRead,BufEnter *.txt setlocal spell spelllang=en_ie
+au BufNewFile,BufRead,BufEnter *.txt setlocal spell spelllang=en_gb
 
 "Show the current mode and command in the status bar
 set showmode
