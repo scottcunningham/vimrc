@@ -13,9 +13,22 @@ set cursorline
 set laststatus=2
 syntax enable
 
-" Pathogen
-call pathogen#infect() " call pathogen
-call pathogen#helptags()
+" Vundle
+" - git clone https://github.com/gmarik/vundle ~/.vim/bundle
+" - :PluginUpdate
+" - Compile YouCompleteMe
+set nocompatible
+filetype off
+set rtp+=~/.vim/bundle/vundle/
+call vundle#rc()
+
+Plugin 'gmarik/vundle'
+Plugin 'Valloric/YouCompleteMe'
+Plugin 'klen/python-mode'
+Plugin 'tpope/vim-fugitive'
+Plugin 'tpope/vim-sensible'
+Plugin 'tpope/vim-surround'
+Plugin 'bling/vim-airline'
 
 " Airline for status display line
 
