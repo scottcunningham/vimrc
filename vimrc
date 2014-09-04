@@ -29,6 +29,26 @@ Plugin 'tpope/vim-fugitive'
 Plugin 'tpope/vim-sensible'
 Plugin 'tpope/vim-surround'
 Plugin 'bling/vim-airline'
+Plugin 'kien/ctrlp.vim'
+Plugin 'scrooloose/nerdtree'
+Plugin 'jelera/vim-javascript-syntax'
+Plugin 'Raimondi/delimitMate'
+Plugin 'scrooloose/syntastic'
+
+" Syntastic check on file open
+let g:syntastic_check_on_open=1
+
+" Use ag-thesilversearcher for ctrl-p search backend.
+if executable("ag")
+    set grepprg=ag\ --nogroup\ --nocolor
+    let g:ctrlp_user_command = 'ag %s -l --nocolor -g ""'
+endif
+
+" Go away, Python mode
+let g:pymode_rope_completion = 0
+
+set wildignore+=*/tmp/*,*.so,*.swp,*.zip,*/.tmp/*,*/.sass-cache/*,*/node_modules/*,*.keep,*.DS_Store,*/.git/*
+
 
 " Airline for status display line
 
@@ -48,7 +68,6 @@ let g:tmuxline_preset = {
 
 " Display-related things
 set ruler
-set background=dark
 set hidden           " Make certain buffers hidden
 set pastetoggle=<F2> " Bind pastetoggle to F2
 set showmode         " Show what mode you're in
@@ -90,8 +109,8 @@ set encoding=utf-8   " Necessary to show Unicode glyphs
 set nomodeline       " Disable reading the first and last few lines of each file for ex commands, for security reasons
 
 " Tabs, spaces and history
-set textwidth=80     " Sets width of text per line, 0 for line wrapping
-set cc=80
+set textwidth=120     " Sets width of text per line, 0 for line wrapping
+set cc=120
 set expandtab
 set ts=4
 set sw=4
@@ -128,10 +147,6 @@ map <silent> <F10> :NERDTreeToggle<CR>
 
 autocmd Filetype pl set syntax=prolog
 
-"Turn on mouse integration
-set mouse=a
-set ttyfast
-
 "`vsplit` to the right, `split` new windows below the current one
 set splitright
 set splitbelow
@@ -139,6 +154,21 @@ set splitbelow
 "Powerline settings
 let g:airline_theme='powerlineish'
 let g:airline_powerline_fonts=1
+
+let g:syntastic_python_checker_args="--max-line-length=120"
+
+let g:pymode_rope_lookup_project = 0
+
+let g:pymode_rope = 0
+
+"Linting
+let g:pymode_lint = 1
+let g:pymode_lint_checker = "pep8"
+" Auto check on save
+let g:pymode_lint_write = 0
+
+" Support virtualenv
+ let g:pymode_virtualenv = 1
 
 " Spelling
 au BufNewFile,BufRead,BufEnter *.txt setlocal spell spelllang=en_ie
@@ -152,3 +182,5 @@ set backspace=indent,eol,start
 if match($TERM, "screen")!=-1
     set term=xterm
 endif
+
+set background=dark
