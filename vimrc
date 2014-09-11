@@ -24,7 +24,7 @@ call vundle#rc()
 
 Plugin 'gmarik/vundle'
 Plugin 'Valloric/YouCompleteMe'
-Plugin 'klen/python-mode'
+Plugin 'nvie/vim-flake8'
 Plugin 'tpope/vim-fugitive'
 Plugin 'tpope/vim-sensible'
 Plugin 'tpope/vim-surround'
@@ -33,10 +33,13 @@ Plugin 'kien/ctrlp.vim'
 Plugin 'scrooloose/nerdtree'
 Plugin 'jelera/vim-javascript-syntax'
 Plugin 'Raimondi/delimitMate'
-Plugin 'scrooloose/syntastic'
+Plugin 'jeroenbourgois/vim-actionscript'
 
-" Syntastic check on file open
-let g:syntastic_check_on_open=1
+" Flake8 options
+" Auto-run on file write
+autocmd BufWritePost *.py call Flake8()
+" Longer line length
+let g:flake8_max_line_length=120
 
 " Use ag-thesilversearcher for ctrl-p search backend.
 if executable("ag")
@@ -44,8 +47,7 @@ if executable("ag")
     let g:ctrlp_user_command = 'ag %s -l --nocolor -g ""'
 endif
 
-" Go away, Python mode
-let g:pymode_rope_completion = 0
+set colorcolumn=120
 
 set wildignore+=*/tmp/*,*.so,*.swp,*.zip,*/.tmp/*,*/.sass-cache/*,*/node_modules/*,*.keep,*.DS_Store,*/.git/*
 
@@ -67,13 +69,13 @@ let g:tmuxline_preset = {
       \'z'    : '#H'}
 
 " Display-related things
-set ruler
 set hidden           " Make certain buffers hidden
 set pastetoggle=<F2> " Bind pastetoggle to F2
 set showmode         " Show what mode you're in
 set title
 set novisualbell
 set noerrorbells
+set hlsearch         " Highlights search results
 
 " Colours 
 set t_Co=256         " 256 colours
@@ -155,23 +157,11 @@ set splitbelow
 let g:airline_theme='powerlineish'
 let g:airline_powerline_fonts=1
 
-let g:syntastic_python_checker_args="--max-line-length=120"
-
-let g:pymode_rope_lookup_project = 0
-
-let g:pymode_rope = 0
-
-"Linting
-let g:pymode_lint = 1
-let g:pymode_lint_checker = "pep8"
-" Auto check on save
-let g:pymode_lint_write = 0
-
-" Support virtualenv
- let g:pymode_virtualenv = 1
+set nofoldenable
+set foldlevelstart=10
 
 " Spelling
-au BufNewFile,BufRead,BufEnter *.txt setlocal spell spelllang=en_ie
+au BufNewFile,BufRead,BufEnter *.txt setlocal spell spelllang=en_GB
 
 "Show the current mode and command in the status bar
 set showmode
