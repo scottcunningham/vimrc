@@ -42,6 +42,10 @@ if match($TERM, "screen")!=-1
     set term=xterm
 endif
 
+if match($TERM, "tmux")!=-1
+    set term=xterm
+endif
+
 set background=dark
 
 "      _ _           _             
