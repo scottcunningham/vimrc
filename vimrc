@@ -20,54 +20,48 @@ set colorcolumn=120
 " Ignore cruft files
 set wildignore+=*/tmp/*,*.so,*.swp,*.zip,*/.tmp/*,*/.sass-cache/*,*/node_modules/*,*.keep,*.DS_Store,*/.git/*
 
-" No perl, assume prolog
-" Hopefully I'll never have to write either again
-autocmd Filetype pl set syntax=prolog
-
 " `vsplit` to the right, `split` new windows below the current one
 set splitright
 set splitbelow
 
-" Spell-checker
+" Spell-checker on txt files
 au BufNewFile,BufRead,BufEnter *.txt setlocal spell spelllang=en_GB
 
-"Show the current mode and command in the status bar
-set showmode
-set showcmd
-set backspace=indent,eol,start
 
-" In screen, we pretend that our $TERM is xterm so that things 
+" In screen, we pretend that our $TERM is xterm so that things
 " display correctly
 if match($TERM, "screen")!=-1
     set term=xterm
 endif
 
-if match($TERM, "tmux")!=-1
-    set term=xterm
-endif
 
-set background=dark
-
-"      _ _           _             
-"   __| (_)___ _ __ | | __ _ _   _ 
+"      _ _           _
+"   __| (_)___ _ __ | | __ _ _   _
 "  / _` | / __| '_ \| |/ _` | | | |
 " | (_| | \__ \ |_) | | (_| | |_| |
 "  \__,_|_|___/ .__/|_|\__,_|\__, |
-"             |_|            |___/ 
-" 
+"             |_|            |___/
+"
 "
 
 " Misc. display-related things
 set hidden           " Make certain buffers hidden
-set showmode         " Show what mode you're in
+set showmode         " Show active mode
+set showcmd          " Show active command
+set backspace=indent,eol,start
 set title
 set novisualbell
 set noerrorbells
 set hlsearch         " Highlights search results
+set background=dark
 
-" Colours 
+" Colours
 set t_Co=256         " 256 colours
 set laststatus=2     " Always show the statusline
+
+if has('gui_running')
+    colorscheme codeschool
+endif
 
 "Highlight spaces, tabs, etc
 set list
@@ -84,13 +78,18 @@ set smartcase        " ... unless they contain at least one capital letter
 set encoding=utf-8   " Necessary to show Unicode glyphs
 set nomodeline       " Disable reading the first and last few lines of each file for ex commands, for security reasons
 
-"  _              _     _           _ _                 
-" | | _____ _   _| |__ (_)_ __   __| (_)_ __   __ _ ___ 
+" Gui options: hide all of the bars, text only
+set guioptions-=T  "remove toolbar
+set guioptions-=r  "remove right-hand scroll bar
+set guioptions-=L  "remove left-hand scroll bar
+
+"  _              _     _           _ _
+" | | _____ _   _| |__ (_)_ __   __| (_)_ __   __ _ ___
 " | |/ / _ \ | | | '_ \| | '_ \ / _` | | '_ \ / _` / __|
 " |   <  __/ |_| | |_) | | | | | (_| | | | | | (_| \__ \
 " |_|\_\___|\__, |_.__/|_|_| |_|\__,_|_|_| |_|\__, |___/
-"           |___/                             |___/     
-"           
+"           |___/                             |___/
+"
 
 "
 " Misc keybindings
@@ -102,27 +101,25 @@ nmap <F1> <nop>
 cmap w!! w !sudo tee % >/dev/null<CR>:e!<CR><CR>
 " Bind f2 to pastetoggle
 nnoremap <F2> :set invpaste paste?<CR>
-" Rebinding supertab to <F3>
-let g:SuperTabMappingForward = '<F3>'
-" swaps between header and source
-map <F4> :A<CR>
-" opens a definition in a new tab
-map <F5> :tab split<CR>:exec("tag ".expand("<cword>"))<CR>
-" opens a definition in a vspilt
-map <F6> :vsp <CR>:exec("tag ".expand("<cword>"))<CR>)
-" set tagbartoggle
-nmap <F7> :TagbarToggle<CR>
-" go to definition
-map <F8> <C-]> 
 " maps NERDTree to F10
 map <silent> <F10> :NERDTreeToggle<CR>
+" CtrlPLine is ctrlp but for the current file
+map <C-o> :CtrlPLine<CR>
+" Virtual line wrapping
+nnoremap j gj
+nnoremap k gk
+" No arrows
+noremap <Up> <NOP>
+noremap <Down> <NOP>
+noremap <Left> <NOP>
+noremap <Right> <NOP>
 
-"   __                            _   _   _             
-"  / _| ___  _ __ _ __ ___   __ _| |_| |_(_)_ __   __ _ 
+"   __                            _   _   _
+"  / _| ___  _ __ _ __ ___   __ _| |_| |_(_)_ __   __ _
 " | |_ / _ \| '__| '_ ` _ \ / _` | __| __| | '_ \ / _` |
 " |  _| (_) | |  | | | | | | (_| | |_| |_| | | | | (_| |
 " |_|  \___/|_|  |_| |_| |_|\__,_|\__|\__|_|_| |_|\__, |
-"                                                 |___/ 
+"                                                 |___/
 
 "
 " Tabs, spaces and history
@@ -138,11 +135,11 @@ set t_vb=
 set history=1000
 set tabpagemax=50
 
-" Indentation and code-related display options. 
+" Indentation and code-related display options.
 set ai               " Set autoindent
 set smartindent      " Use intelligent indentation
 set wrap             " Set wrapping
-set linebreak        " For some reason, wiki says this should be set when trying to disasble linebreak
+set linebreak        " For some reason, wiki says this should be set when trying to disable linebreak
 set nolist           " List disables linebreak
 set wrapmargin=0     " Stop inserting line break on wrap
 set formatoptions+=1 " Stop wrapping
@@ -152,30 +149,24 @@ filetype indent on   " Makes indentation different per file, good with html
 filetype on
 
 
-"                _      
-"   ___ ___   __| | ___ 
+"                _
+"   ___ ___   __| | ___
 "  / __/ _ \ / _` |/ _ \
 " | (_| (_) | (_| |  __/
 "  \___\___/ \__,_|\___|
-"                       
-
-" Tags
-set tags=./tags;/    " Search the source tree for tags
-let Tlist_Ctags_Cmd = "/usr/bin/ctags" " For taglist
-let Tlist_WinWidth = 50 " For Taglist
-let g:tagbar_autofocus = 1 " go to tagbar window automatically
+"
 
 " Turn off code folding
 set nofoldenable
 set foldlevelstart=10
 
-"         _             _           
-"   _ __ | |_   _  __ _(_)_ __  ___ 
+"         _             _
+"   _ __ | |_   _  __ _(_)_ __  ___
 "  | '_ \| | | | |/ _` | | '_ \/ __|
 "  | |_) | | |_| | (_| | | | | \__ \
 "  | .__/|_|\__,_|\__, |_|_| |_|___/
-"  |_|            |___/             
-"  
+"  |_|            |___/
+"
 
 "
 " Vundle-related settings
@@ -197,18 +188,23 @@ Plugin 'scrooloose/nerdtree'
 Plugin 'jelera/vim-javascript-syntax'
 Plugin 'Raimondi/delimitMate'
 Plugin 'jeroenbourgois/vim-actionscript'
+Plugin 'ntpeters/vim-better-whitespace'
+Plugin 'vim-scripts/Conque-Shell'
+Plugin 'scrooloose/syntastic'
+Plugin 'Lokaltog/vim-easymotion'
 
 "
-" Airline settings 
+" Airline settings
 "
-
 let g:airline_powerline_fonts = 1
 let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#tabline#left_sep = ' '
 let g:airline_theme='powerlineish'
 let g:airline_powerline_fonts=1
 let g:airline#extensions#tabline#left_alt_sep = '|'
-set guifont=Inconsolata\ for\ Powerline
+set guifont=Inconsolata\ for\ Powerline\ 11
+let g:syntastic_python_checkers=["flake8"]
+let g:flake8_max_line_length=120
 
 let g:tmuxline_preset = {
       \'a'    : '#S',
@@ -220,7 +216,6 @@ let g:tmuxline_preset = {
 "
 " Flake8 options
 "
-
 " Auto-run on file write
 autocmd BufWritePost *.py call Flake8()
 " Longer line length
