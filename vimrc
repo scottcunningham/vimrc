@@ -2,12 +2,12 @@
 " .vimrc
 "
 
-"  _               _          
-" | |__   __ _ ___(_) ___ ___ 
+"  _               _
+" | |__   __ _ ___(_) ___ ___
 " | '_ \ / _` / __| |/ __/ __|
 " | |_) | (_| \__ \ | (__\__ \
 " |_.__/ \__,_|___/_|\___|___/
-"                             
+"
 set nocompatible
 set timeoutlen=1000
 set ttimeoutlen=0
@@ -16,6 +16,8 @@ set cursorline
 set laststatus=2
 syntax enable
 set colorcolumn=120
+" Neovim enables mouse by default... how annoying
+set mouse=""
 
 " Ignore cruft files
 set wildignore+=*/tmp/*,*.so,*.swp,*.zip,*/.tmp/*,*/.sass-cache/*,*/node_modules/*,*.keep,*.DS_Store,*/.git/*
@@ -148,6 +150,8 @@ filetype plugin indent on
 filetype indent on   " Makes indentation different per file, good with html
 filetype on
 
+au BufRead,BufNewFile *.eyaml setfiletype yaml
+
 
 "                _
 "   ___ ___   __| | ___
@@ -192,6 +196,13 @@ Plugin 'ntpeters/vim-better-whitespace'
 Plugin 'vim-scripts/Conque-Shell'
 Plugin 'scrooloose/syntastic'
 Plugin 'Lokaltog/vim-easymotion'
+Plugin 'chase/vim-ansible-yaml'
+Plugin 'rodjek/vim-puppet'
+Plugin 'scrooloose/syntastic'
+Plugin 'kchmck/vim-coffee-script'
+Plugin 'vim-scripts/PreserveNoEOL'
+Plugin 'markcornick/vim-terraform'
+Plugin 'tpope/vim-markdown'
 
 "
 " Airline settings
@@ -204,7 +215,7 @@ let g:airline_powerline_fonts=1
 let g:airline#extensions#tabline#left_alt_sep = '|'
 set guifont=Inconsolata\ for\ Powerline\ 11
 let g:syntastic_python_checkers=["flake8"]
-let g:flake8_max_line_length=120
+let g:PreserveNoEOL = 1
 
 let g:tmuxline_preset = {
       \'a'    : '#S',
@@ -218,10 +229,30 @@ let g:tmuxline_preset = {
 "
 " Auto-run on file write
 autocmd BufWritePost *.py call Flake8()
-" Longer line length
-let g:flake8_max_line_length=120
 " Remap it to F1
 autocmd FileType python map <buffer> <F1> :call Flake8()<CR>
+
+" Markdown filetypes
+au! BufRead,BufNewFile *.markdown set filetype=mkd
+au! BufRead,BufNewFile *.md       set filetype=mkd
+
+" _
+"| |_ ___ _ __ _ __ ___
+"| __/ _ \ '__| '_ ` _ \
+"| ||  __/ |  | | | | | |
+" \__\___|_|  |_| |_| |_|
+"
+
+" Spawn a neovim zsh terminal with f4
+nnoremap <F4> :e term://zsh <CR>
+tnoremap <A-h> <C-\><C-n><C-w>h
+tnoremap <A-j> <C-\><C-n><C-w>j
+tnoremap <A-k> <C-\><C-n><C-w>k
+tnoremap <A-l> <C-\><C-n><C-w>l
+nnoremap <A-h> <C-w>h
+nnoremap <A-j> <C-w>j
+nnoremap <A-k> <C-w>k
+nnoremap <A-l> <C-w>l
 
 "
 " ctrlp settings
