@@ -36,6 +36,8 @@ if match($TERM, "screen")!=-1
     set term=xterm
 endif
 
+let mapleader=","
+
 
 "      _ _           _
 "   __| (_)___ _ __ | | __ _ _   _
@@ -103,6 +105,9 @@ nmap <F1> <nop>
 cmap w!! w !sudo tee % >/dev/null<CR>:e!<CR><CR>
 " Bind f2 to pastetoggle
 nnoremap <F2> :set invpaste paste?<CR>
+" Bind f3 to open shell
+nnoremap <F3> :VimShell<CR>
+" maps NERDTree to F10
 " maps NERDTree to F10
 map <silent> <F10> :NERDTreeToggle<CR>
 " CtrlPLine is ctrlp but for the current file
@@ -186,7 +191,8 @@ Plugin 'nvie/vim-flake8'
 Plugin 'tpope/vim-fugitive'
 Plugin 'tpope/vim-sensible'
 Plugin 'tpope/vim-surround'
-Plugin 'bling/vim-airline'
+Plugin 'vim-airline/vim-airline'
+Plugin 'vim-airline/vim-airline-themes'
 Plugin 'kien/ctrlp.vim'
 Plugin 'scrooloose/nerdtree'
 Plugin 'jelera/vim-javascript-syntax'
@@ -202,7 +208,19 @@ Plugin 'kchmck/vim-coffee-script'
 Plugin 'vim-scripts/PreserveNoEOL'
 Plugin 'markcornick/vim-terraform'
 Plugin 'tpope/vim-markdown'
+Plugin 'mhinz/vim-startify'
+Plugin 'mhinz/vim-signify'
+Plugin 'SirVer/ultisnips'
+Plugin 'honza/vim-snippets'
+Plugin 'Shougo/vimshell.vim'
+Plugin 'Shougo/vimproc.vim'
 
+
+" Let :UltiSnipsEdit split window.
+let g:UltiSnipsExpandTrigger="/"
+let g:UltiSnipsEditSplit="vertical"
+
+"
 "
 " Airline settings
 "
