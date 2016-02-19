@@ -16,7 +16,7 @@ set cursorline
 set laststatus=2
 syntax enable
 set colorcolumn=120
-" Neovim enables mouse by default... how annoying
+" gtfo
 set mouse=""
 
 " Ignore cruft files
@@ -108,7 +108,6 @@ nnoremap <F2> :set invpaste paste?<CR>
 " Bind f3 to open shell
 nnoremap <F3> :VimShell<CR>
 " maps NERDTree to F10
-" maps NERDTree to F10
 map <silent> <F10> :NERDTreeToggle<CR>
 " CtrlPLine is ctrlp but for the current file
 map <C-o> :CtrlPLine<CR>
@@ -131,7 +130,6 @@ noremap <Right> <NOP>
 "
 " Tabs, spaces and history
 "
-set textwidth=120     " Sets width of text per line, 0 for line wrapping
 set cc=120
 set expandtab
 set ts=4
@@ -210,17 +208,22 @@ Plugin 'markcornick/vim-terraform'
 Plugin 'tpope/vim-markdown'
 Plugin 'mhinz/vim-startify'
 Plugin 'mhinz/vim-signify'
+Plugin 'pangloss/vim-javascript'
 Plugin 'SirVer/ultisnips'
+Plugin 'chase/vim-ansible-yaml'
 Plugin 'honza/vim-snippets'
 Plugin 'Shougo/vimshell.vim'
 Plugin 'Shougo/vimproc.vim'
 
-
 " Let :UltiSnipsEdit split window.
 let g:UltiSnipsExpandTrigger="/"
 let g:UltiSnipsEditSplit="vertical"
-
-"
+" Markdown filetypes
+au! BufRead,BufNewFile *.markdown set filetype=mkd
+au! BufRead,BufNewFile *.md       set filetype=mkd
+" Let :UltiSnipsEdit split window.
+let g:UltiSnipsExpandTrigger="/"
+let g:UltiSnipsEditSplit="vertical"
 "
 " Airline settings
 "
@@ -248,10 +251,10 @@ let g:tmuxline_preset = {
 autocmd BufWritePost *.py call Flake8()
 " Remap it to F1
 autocmd FileType python map <buffer> <F1> :call Flake8()<CR>
-
 " Markdown filetypes
 au! BufRead,BufNewFile *.markdown set filetype=mkd
 au! BufRead,BufNewFile *.md       set filetype=mkd
+
 
 " _
 "| |_ ___ _ __ _ __ ___
@@ -282,3 +285,6 @@ if executable("ag")
     set grepprg=ag\ --nogroup\ --nocolor
     let g:ctrlp_user_command = 'ag %s -l --nocolor -g ""'
 endif
+
+let g:syntastic_ruby_checkers          = ['rubocop']
+let g:syntastic_ruby_rubocop_exec      = 'bundle exec rubocop'
