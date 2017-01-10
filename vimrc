@@ -105,8 +105,8 @@ nmap <F1> <nop>
 cmap w!! w !sudo tee % >/dev/null<CR>:e!<CR><CR>
 " Bind f2 to pastetoggle
 nnoremap <F2> :set invpaste paste?<CR>
-" Bind f3 to open shell
-nnoremap <F3> :VimShell<CR>
+" Bind f3 to numtoggle
+nnoremap <F3> :set invnumber number?<CR>
 " maps NERDTree to F10
 map <silent> <F10> :NERDTreeToggle<CR>
 " CtrlPLine is ctrlp but for the current file
@@ -183,6 +183,7 @@ filetype off
 set rtp+=~/.vim/bundle/vundle/
 call vundle#rc()
 
+Plugin 'godlygeek/tabular'
 Plugin 'gmarik/vundle'
 Plugin 'Valloric/YouCompleteMe'
 Plugin 'nvie/vim-flake8'
@@ -198,7 +199,7 @@ Plugin 'Raimondi/delimitMate'
 Plugin 'jeroenbourgois/vim-actionscript'
 Plugin 'ntpeters/vim-better-whitespace'
 Plugin 'vim-scripts/Conque-Shell'
-Plugin 'scrooloose/syntastic'
+"Plugin 'scrooloose/syntastic'
 Plugin 'Lokaltog/vim-easymotion'
 Plugin 'chase/vim-ansible-yaml'
 Plugin 'rodjek/vim-puppet'
@@ -209,20 +210,19 @@ Plugin 'tpope/vim-markdown'
 Plugin 'mhinz/vim-startify'
 Plugin 'mhinz/vim-signify'
 Plugin 'pangloss/vim-javascript'
-Plugin 'SirVer/ultisnips'
+" Plugin 'SirVer/ultisnips'
 Plugin 'honza/vim-snippets'
 Plugin 'Shougo/vimshell.vim'
 Plugin 'Shougo/vimproc.vim'
+" Plugin 'fatih/vim-hclfmt'
+Plugin 'tommcdo/vim-fubitive'
+Plugin 'jceb/vim-orgmode'
+Plugin 'tpope/vim-speeddating'
+Plugin 'pearofducks/ansible-vim'
 
-" Let :UltiSnipsEdit split window.
-let g:UltiSnipsExpandTrigger="/"
-let g:UltiSnipsEditSplit="vertical"
 " Markdown filetypes
 au! BufRead,BufNewFile *.markdown set filetype=mkd
 au! BufRead,BufNewFile *.md       set filetype=mkd
-" Let :UltiSnipsEdit split window.
-let g:UltiSnipsExpandTrigger="/"
-let g:UltiSnipsEditSplit="vertical"
 "
 " Airline settings
 "
@@ -233,7 +233,7 @@ let g:airline_theme='powerlineish'
 let g:airline_powerline_fonts=1
 let g:airline#extensions#tabline#left_alt_sep = '|'
 set guifont=Inconsolata\ for\ Powerline\ 11
-let g:syntastic_python_checkers=["flake8"]
+"let g:syntastic_python_checkers=["flake8"]
 let g:PreserveNoEOL = 1
 
 let g:tmuxline_preset = {
@@ -254,6 +254,11 @@ autocmd FileType python map <buffer> <F1> :call Flake8()<CR>
 au! BufRead,BufNewFile *.markdown set filetype=mkd
 au! BufRead,BufNewFile *.md       set filetype=mkd
 
+" Automagically set ansible filetype in all ansible repos
+autocmd BufRead,BufNewFile ~/src/ansible/ens-ansible/playbooks/*.yml set ft=ansible
+autocmd BufRead,BufNewFile ~/src/ansible/ens-ansible/playbooks/*.yaml set ft=ansible
+autocmd BufRead,BufNewFile ~/src/ansible/*/*/*.yml set ft=ansible
+autocmd BufRead,BufNewFile ~/src/ansible/*/*/*.yaml set ft=ansible
 
 " _
 "| |_ ___ _ __ _ __ ___
@@ -275,6 +280,8 @@ nnoremap <A-j> <C-w>j
 nnoremap <A-k> <C-w>k
 nnoremap <A-l> <C-w>l
 
+abbreviate xPpProfile class { profiles::fixme (<CR><TAB>String fix  => hiera('profiles::fixme::fix', ''),<CR>){<CR><TAB># code<CR>}
+
 "
 " ctrlp settings
 "
@@ -287,3 +294,39 @@ endif
 
 let g:syntastic_ruby_checkers          = ['rubocop']
 let g:syntastic_ruby_rubocop_exec      = 'bundle exec rubocop'
+
+
+" stolen
+" https://realpython.com/blog/python/vim-and-python-a-match-made-in-heaven/
+
+" Fode Colding
+set foldmethod=indent
+set foldlevel=99
+" Enable folding with the spacebar
+nnoremap <space> za
+
+let g:ycm_autoclose_preview_window_after_completion=1
+map <leader>g  :YcmCompleter GoToDefinitionElseDeclaration<CR>
+
+"python with virtualenv support
+"py << EOF
+"import os
+"import sys
+"if 'VIRTUAL_ENV' in os.environ:
+"  project_base_dir = os.environ['VIRTUAL_ENV']
+"  activate_this = os.path.join(project_base_dir, 'bin/activate_this.py')
+"  execfile(activate_this, dict(__file__=activate_this))
+"EOF
+"
+"let python_highlight_all=1
+
+" osx clipboard omg
+"set clipboard=unnamed
+
+" stupid RVM breaks syntastic
+" https://rvm.io/integration/vim
+" https://github.com/skwp/dotfiles/issues/590
+set shell=/bin/sh
+
+" go away rbenv :/
+"" let g:syntastic_ruby_mri_exec = "/Users/Scott/.rbenv/shims/ruby"
