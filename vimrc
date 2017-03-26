@@ -139,7 +139,7 @@ Plugin 'valloric/YouCompleteMe'             " Heavyweight completion engine
 Plugin 'vim-airline/vim-airline'            " Fancy status bar
 Plugin 'vim-airline/vim-airline-themes'     " Fancy theme for fancy status bar
 Plugin 'vim-scripts/PreserveNoEOL'          " Omit the final newline of a file if it wasn't present when we opened it
-Plugin 'w0rp/ale'                           " Asynchronous linting (FIXME: do I use this or syntastic?)
+Plugin 'vim-syntastic/syntastic'            " Syntax checkers for most things in the universe
 call vundle#end()
 filetype plugin indent on
 " }}}
