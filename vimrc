@@ -219,6 +219,10 @@ Plugin 'tommcdo/vim-fubitive'
 Plugin 'jceb/vim-orgmode'
 Plugin 'tpope/vim-speeddating'
 Plugin 'pearofducks/ansible-vim'
+"Plugin 'python-mode/python-mode'
+
+" pythonmode
+hi pythonSelf  ctermfg=68  guifg=#5f87d7 cterm=bold gui=bold
 
 " Markdown filetypes
 au! BufRead,BufNewFile *.markdown set filetype=mkd
