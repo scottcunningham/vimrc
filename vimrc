@@ -63,10 +63,6 @@ set background=dark
 set t_Co=256         " 256 colours
 set laststatus=2     " Always show the statusline
 
-if has('gui_running')
-    colorscheme codeschool
-endif
-
 "Highlight spaces, tabs, etc
 set list
 set listchars=tab:›\ ,trail:•,extends:#,nbsp:.
