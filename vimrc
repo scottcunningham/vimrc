@@ -88,14 +88,10 @@ set mouse=""
 let mapleader=","                   " Set leader to ,
 " Open Gundo UI with ,u
 nnoremap <leader>u :GundoToggle<CR>
-" edit vimrc/zshrc and load vimrc bindings
-nnoremap <leader>ev :vsp $MYVIMRC<CR>
-nnoremap <leader>ez :vsp ~/.zshrc<CR>
-nnoremap <leader>sv :source $MYVIMRC<CR>
 " Save session with ,s, then we can re-open it with vim -S
 nnoremap <leader>s :mksession<CR>
-" Open :Ag with ,a
-nnoremap <leader>a :Ag
+" Open :CtrlP with ,a
+nnoremap <leader>a :CtrlP
 " }}}
 
 " Misc keybindings {{{
