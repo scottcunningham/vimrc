@@ -1,10 +1,11 @@
 #!/bin/bash
 
-DOTFILES="vimrc vim"
+ln -s "${PWD}/vimrc" "${HOME}/.vimrc"
+mkdir "${HOME}/.vim"
 
-for fn in $DOTFILES; do
-	echo "Copying $fn"
-	ln -s $PWD/$fn $HOME/.$fn
-done
+git clone "https://github.com/VundleVim/Vundle.vim.git" "${HOME}/.vim/bundle/Vundle.vim"
+
+vim +PluginInstall
+vim +PluginUpdate
 
 echo "Done."
