@@ -5,7 +5,6 @@ mkdir "${HOME}/.vim"
 
 git clone "https://github.com/VundleVim/Vundle.vim.git" "${HOME}/.vim/bundle/Vundle.vim"
 
-vim +PluginInstall
-vim +PluginUpdate
+vim -c +PluginInstall +qall
 
 echo "Done."
