@@ -92,7 +92,13 @@ map <silent> <F10> :NERDTreeToggle<CR>   " Toggle NERDTree with F10
 
 " Options for specific filetypes{{{
 " Python
+autocmd BufWritePost *.py execute ':execute "!black %" | e'
 autocmd BufWritePost *.py call Flake8() " Auto-run flake8 when we write a Python file
+nnoremap <C-S-c> :Black<CR>
+" Go
+autocmd BufWritePre *.go :GoFmt  " Auto-format go on save
+autocmd BufWritePre *.go :GoImports " Auto-format go imports on save
+autocmd BufWritePost *.go execute ':GoDiagnostics! all'
 " Markdown
 au! BufRead,BufNewFile *.markdown set filetype=markdown " Associate *.markdown with markdown syntax
 au! BufRead,BufNewFile *.md       set filetype=markdown " Associate *.md with markdown syntax
@@ -105,34 +111,34 @@ call vundle#begin()
 
 Plugin 'VundleVim/Vundle.vim'               " Let Vundle manage Vundle
 
-Plugin 'chase/vim-ansible-yaml'             " Ansible: Nicer highlighting for Ansible YAML
-Plugin 'hashivim/vim-terraform'             " Terraform: adds :Terraform command, highlights tf, tfvars, tfstate
-Plugin 'jelera/vim-javascript-syntax'       " JavaScript: Improved syntax highlighting
-Plugin 'kchmck/vim-coffee-script'           " CoffeeScript: formatting, etc
-Plugin 'kien/ctrlp.vim'                     " Fast searching
-Plugin 'lokaltog/vim-easymotion'            " Motions (FIXME: do I use this?)
-Plugin 'mhinz/vim-signify'                  " Show git status of lines in sidebar, +/-/etc
 Plugin 'ntpeters/vim-better-whitespace'     " Highlight trailing whitespace
 Plugin 'nvie/vim-flake8'                    " Python: style checking
 Plugin 'raimondi/delimitMate'               " Auto-complete matching quotes, brackets, etc
-Plugin 'rodjek/vim-puppet'                  " Puppet: formatting, highlighting, alignment of =>, etc
 Plugin 'scrooloose/nerdtree'                " Graphical file manager
 Plugin 'tpope/vim-fugitive'                 " Git wrapper
 Plugin 'tpope/vim-sensible'                 " Universally good defaults
-Plugin 'tpope/vim-speeddating'              " Use ctrl-a and ctrl-x to increment/decrement times/dates
-Plugin 'valloric/YouCompleteMe'             " Heavyweight completion engine
 Plugin 'vim-airline/vim-airline'            " Fancy status bar
 Plugin 'vim-airline/vim-airline-themes'     " Fancy theme for fancy status bar
 Plugin 'vim-scripts/PreserveNoEOL'          " Omit the final newline of a file if it wasn't present when we opened it
-Plugin 'vim-syntastic/syntastic'            " Syntax checkers for most things in the universe
+Plugin 'christoomey/vim-tmux-navigator'     " vim+tmux
+Plugin 'ambv/black'                         " Reformat Python
+Plugin 'darrikonn/vim-gofmt'                " Go format
+Plugin 'junegunn/fzf'                       " Fuzzy find stuff
+Plugin 'dense-analysis/ale'                 " Completion, formatting, etc
+Plugin 'junegunn/rainbow_parentheses.vim'   " Rainbow brackets
+Plugin 'ray-x/go.nvim'
 call vundle#end()
 filetype plugin indent on
+
+" We don't have up-to-date vim/nvim, ignore it
+let g:go_version_warning = 0
+
+set rtp+=~/.fzf
+
 " }}}
 
 " Plugin configuration {{{
-" YouCompleteMe
-let g:ycm_autoclose_preview_window_after_completion=1          " Close preview after choosing completion
-map <leader>g  :YcmCompleter GoToDefinitionElseDeclaration<CR> " Go to def/decl of code with ,g
+
 " Airline
 let g:airline_powerline_fonts = 1                   " Use patched powerline fonts
 let g:airline#extensions#tabline#enabled = 1        " Display all buffers when only one tab open
@@ -144,6 +150,16 @@ let g:ctrlp_user_command = 'ag %s -l --nocolor -g ""' " Use ag for ctrl-p search
 map <leader>/ :CtrlPLine<CR>                          " Use CtrlP to search the current file with ,/
 let ctrlp_switch_buffer=0                             " Always open files in new buffer
 let g:ctrlp_working_path=0                            " Tell CtrlP to respect when we change directories
+
+
+" Rainbow parens
+autocmd FileType * RainbowParentheses
+let g:rainbow#blacklist = [30, 40]
+
+" Ale
+let g:ale_linters = {'python': ['autopep8', 'flake8', 'pyre', 'pyls', 'pylint'], 'go': ['gofmt', 'golangserver']}
+nmap <C-d> :ALEGoToDefinition<CR>
+
 " }}}
 
 " NeoVim terminal settings {{{
