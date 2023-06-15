@@ -83,16 +83,6 @@ noremap <Right> <NOP>
 set mouse=""
 " }}}
 
-" Leader shortcuts {{{
-let mapleader=","                   " Set leader to ,
-" Open Gundo UI with ,u
-nnoremap <leader>u :GundoToggle<CR>
-" Save session with ,s, then we can re-open it with vim -S
-nnoremap <leader>s :mksession<CR>
-" Open :CtrlP with ,a
-nnoremap <leader>a :CtrlP
-" }}}
-
 " Misc keybindings {{{
 nmap <F1> <nop>                          " Disable F1 going into annoying help mode
 nnoremap <F2> :set invpaste paste?<CR>   " Toggle paste with F2
