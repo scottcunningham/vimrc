@@ -15,7 +15,6 @@ au BufNewFile,BufRead,BufEnter *.txt setlocal spell spelllang=en_US  " Spell-che
 "}}}
 
 " Colours {{{
-set colorcolumn=120 " Highlight the 120th column to show when our lines are too long
 syntax enable       " Enable syntax highlighting
 set t_Co=256        " Use the full 256 colours
 " }}}
