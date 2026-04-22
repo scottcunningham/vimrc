@@ -125,62 +125,45 @@ vim.api.nvim_create_autocmd({"BufWritePost"}, {
     end
 })
 
------------------------------------------------------------
--- Plugin management (packer.nvim)
------------------------------------------------------------
-local ensure_packer = function()
-  local fn = vim.fn
-  local install_path = fn.stdpath('data')..'/site/pack/packer/start/packer.nvim'
-  if fn.empty(fn.glob(install_path)) > 0 then
-    fn.system({'git', 'clone', '--depth', '1', 'https://github.com/wbthomason/packer.nvim', install_path})
-    vim.cmd [[packadd packer.nvim]]
-    return true
-  end
-  return false
-end
-
-local packer_bootstrap = ensure_packer()
-
-require('packer').startup(function(use)
-  -- do not remove packer on startup
-  use 'wbthomason/packer.nvim'
-  -- colourscheme
-  use 'vague2k/vague.nvim'
-
-  use 'ntpeters/vim-better-whitespace'
-  use 'nvie/vim-flake8'
-  use 'raimondi/delimitMate'
-  use 'scrooloose/nerdtree'
-  use 'tpope/vim-fugitive'
-  use 'tpope/vim-sensible'
-  use 'vim-airline/vim-airline'
-  use 'vim-airline/vim-airline-themes'
-  use 'vim-scripts/PreserveNoEOL'
-  use 'christoomey/vim-tmux-navigator'
-  use 'averms/black-nvim'
-  use 'junegunn/fzf'
-  use 'junegunn/rainbow_parentheses.vim'
-  use 'crispgm/nvim-go'
-
-  use "nvim-lua/plenary.nvim"
-  use 'neovim/nvim-lspconfig'
-  use 'nvimtools/none-ls.nvim'
-  use 'nvim-treesitter/nvim-treesitter'
-  use 'nvim-telescope/telescope.nvim'
-  use 'mfussenegger/nvim-dap'
-
-  use 'folke/trouble.nvim'
-
-  use {
-    'olimorris/codecompanion.nvim',
-    requires = { 'nvim-lua/plenary.nvim', 'nvim-treesitter/nvim-treesitter' },
-  }
-
-  if meta_init then meta_init.plugins(use) end
-end)
+vim.pack.add({
+  "https://github.com/vague2k/vague.nvim",
+  "https://github.com/ntpeters/vim-better-whitespace",
+  "https://github.com/nvie/vim-flake8",
+  "https://github.com/raimondi/delimitMate",
+  "https://github.com/scrooloose/nerdtree",
+  "https://github.com/tpope/vim-fugitive",
+  "https://github.com/tpope/vim-sensible",
+  "https://github.com/vim-airline/vim-airline",
+  "https://github.com/vim-airline/vim-airline-themes",
+  "https://github.com/vim-scripts/PreserveNoEOL",
+  "https://github.com/christoomey/vim-tmux-navigator",
+  "https://github.com/averms/black-nvim",
+  "https://github.com/junegunn/fzf",
+  "https://github.com/junegunn/rainbow_parentheses.vim",
+  "https://github.com/crispgm/nvim-go",
+  "https://github.com/nvim-lua/plenary.nvim",
+  "https://github.com/neovim/nvim-lspconfig",
+  "https://github.com/nvimtools/none-ls.nvim",
+  "https://github.com/nvim-treesitter/nvim-treesitter",
+  "https://github.com/nvim-telescope/telescope.nvim",
+  "https://github.com/mfussenegger/nvim-dap",
+  "https://github.com/folke/trouble.nvim",
+  "https://github.com/olimorris/codecompanion.nvim",
+})
 
 require("trouble").setup()
 vim.api.nvim_set_keymap("", "<leader>.", ":Trouble diagnostics toggle<CR>", {})
+
+require("codecompanion").setup({
+  interactions = {
+    chat = {
+      adapter = {
+        name = "opencode",
+        model = "pickle",
+      },
+    },
+  },
+})
 
 vim.cmd("colorscheme vague")
 
@@ -191,26 +174,22 @@ require'go'.setup {
   formatter = 'gofmt',
 }
 
-vim.cmd("autocmd BufNewFile,BufRead */recipes/*.rb set ft=chef syntax=ruby")
-
-require("nvim-treesitter.install").prefer_git = true
-local parser_config = require "nvim-treesitter.parsers".get_parser_configs()
-parser_config.ruby.used_by = "chef"
+vim.api.nvim_create_autocmd({"BufNewFile", "BufRead"}, {
+  pattern = "*/recipes/*.rb",
+  callback = function()
+    vim.bo.filetype = "chef"
+    vim.treesitter.language.register("ruby", "chef")
+  end
+})
 
 if meta_init then meta_init.setup() end
 
-local function setup_lsp_diags()
-  vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
-    vim.lsp.diagnostic.on_publish_diagnostics,
-    {
-      virtual_text = true,
-      signs = true,
-      update_in_insert = true,
-      underline = true,
-    }
-  )
-end
-setup_lsp_diags()
+vim.diagnostic.config({
+  virtual_text = true,
+  signs = true,
+  update_in_insert = true,
+  underline = true,
+})
 
 -----------------------------------------------------------
 -- Plugin configuration
