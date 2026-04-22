@@ -19,6 +19,10 @@ vim.api.nvim_create_autocmd({"BufNewFile","BufRead","BufEnter"}, {
 
 vim.g.mapleader = ','
 
+-- Load Meta-specific config if available
+local ok, meta_init = pcall(dofile, vim.fn.stdpath("config") .. "/init-meta.lua")
+if not ok then meta_init = nil end
+
 -----------------------------------------------------------
 -- Colors
 -----------------------------------------------------------
@@ -112,12 +116,9 @@ vim.api.nvim_create_autocmd({"BufRead","BufNewFile"}, {
 vim.api.nvim_create_autocmd({"BufWritePost"}, {
     pattern = {
         "*.py",
-        "*.cconf",
         "*.rs",
         "*.rb",
         "*.go",
-        "BUCK",
-        "TARGETS",
     },
     callback = function()
         vim.lsp.buf.format()
@@ -170,14 +171,12 @@ require('packer').startup(function(use)
 
   use 'folke/trouble.nvim'
 
-  use { "/usr/share/fb-editor-support/nvim", as = "meta.nvim" }
-
-  use { '~/src/codecompanion-fb-adapter', as = 'codecompanion-meta-adapter' }
   use {
     'olimorris/codecompanion.nvim',
     requires = { 'nvim-lua/plenary.nvim', 'nvim-treesitter/nvim-treesitter' },
-    config = function() require("meta-adapter").setup() end,
   }
+
+  if meta_init then meta_init.plugins(use) end
 end)
 
 require("trouble").setup()
@@ -198,47 +197,7 @@ require("nvim-treesitter.install").prefer_git = true
 local parser_config = require "nvim-treesitter.parsers".get_parser_configs()
 parser_config.ruby.used_by = "chef"
 
-local meta = require("meta")
-meta.setup()
-require('meta.hg').setup()
-require('meta.lsp')
-
-vim.lsp.enable({
-  "rust-analyzer@meta",
-  "fb-pyright-ls@meta",
-  "pyre@meta",
-  "thriftlsp@meta",
-  "buck2@meta",
-  "gopls@meta",
-  "eslint@meta",
-  "prettier@meta",
-  "flow@meta",
-  "hhvm",
-  "linttool@meta",
-  "relay@meta",
-  "code-compose",
-})
-
-local null_ls = require("null-ls")
-null_ls.setup({
-  on_attach = on_attach,
-  sources = {
-    meta.null_ls.diagnostics.arclint,
-    meta.null_ls.formatting.arclint,
-    meta.null_ls.diagnostics.rust_clippy,
-  }
-})
-
-require('meta.lsp.extensions')
-require('meta.keymaps')
-require('meta.metamate').init({
-  -- // change the keymap used for accepting completion. defaults to <C-l>
-  completionKeymap='<C-m>',
-  -- // change the highlight group used for showing the completion. defaults to Delimiter
-  virtualTextHighlightGroup='ErrorMsg',
-  -- // change the languages to target. defaults to php, python, rust
-  filetypes = {"php", "python", "rust", "go"}
-})
+if meta_init then meta_init.setup() end
 
 local function setup_lsp_diags()
   vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
